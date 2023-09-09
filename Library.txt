@@ -1,0 +1,135 @@
+// Name:Tiffany Albelto
+// Course Name:Software Development 1 - 202410-CEN-3024C-16046
+// Date:August 31st, 2023
+
+
+
+// Class Name:Library
+
+// Overall Class Description:
+//This class represents a library that contains a collection of books. It implements the `Serializable`
+// interface, indicating that objects of this class can be serialized and deserialized.The `Library` class
+// has one private instance variable: `books`, which is a list of `Book` objects. It provides methods
+// to add a book to the library, remove a book from the library by ID, list all books in the library,
+// and load books from a file.The `Library` class primarily focuses on managing the collection of `Book`objects
+// and providing functionality to add, remove, list, and load books in the library.
+
+
+
+
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+
+
+// Declaring a private list object 'books' to store books.
+public class Library implements Serializable {
+    private List<Book> books;
+
+
+
+    // Default Constructor: `Library()`
+    ////Purpose: Initializes a `Library` object by creating a new ArrayList to store the books.
+    ////Arguments: None
+    ////Return Value: None
+    public Library() {
+        this.books = new ArrayList<>();
+    }
+
+
+
+    //Method: `addBook(Book book)`
+    //Purpose: Adds a book to the library by adding it to the `books` list.
+    //Arguments: `book` - The `Book` object to be added to the library.
+    //Return Value: None
+    public void addBook(Book book) {
+        books.add(book);
+    }
+
+    //Method: `removeBook(int id)`
+    //Purpose: Removes a book from the library based on its ID.
+    //Arguments: `id` - The ID of the book to be removed.
+    //Return Value: `true` if the book with the provided ID is found and removed successfully; `false` otherwise.
+
+    public boolean removeBook(int id) {
+        Iterator<Book> iterator = books.iterator();
+        while (iterator.hasNext()) {
+            Book book = iterator.next();
+            if (book.getId() == id) {
+                iterator.remove();
+
+                // Return true if the book is found using the ID provided by user and removed it.
+                return true;
+            }
+        }
+
+        // Return false if the book ID is not found in the collection of books.
+        return false;
+    }
+
+
+    //Method: `listBooks()`
+    //Purpose: Prints the details of all the books in the library.
+    //Arguments: None
+    //Return Value: None
+    public void listBooks() {
+        for (Book book : books) {
+            System.out.println("ID: " + book.getId() +
+                    ", Title: " + book.getTitle() +
+                    ", Author: " + book.getAuthor());
+        }
+    }
+
+    //Method: `loadBooks(String filePath)`
+    //Purpose: Loads books from a file and adds them to the library.
+    //Arguments: `filePath` - The pathway of the file to be loaded.
+    //Return Value: None (throws an `IOException` if there is an error in file reading).
+
+    public void loadBooks(String filePath) throws IOException{
+        BufferedReader reader = new
+                BufferedReader(new FileReader(filePath));
+        String line;
+        while ((line = reader.readLine())!= null) {
+            String[] bookData = line.split(",");
+            books.add(new Book(Integer.valueOf(bookData[0]),bookData[1],bookData[2]));
+        }
+        reader.close();
+    }
+
+
+//Method to load books to a file and adds them to the library. the method takes a 'fileName' parameter which represents
+// the pathway of the file to be loaded.
+    public void loadBooksFromFile(String fileName) {
+
+        // used to read the file line by line
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+
+            //Read each line from the file
+            while ((line = reader.readLine()) != null) {
+
+                //split the line by commas to get book information
+                String[] bookInfo = line.split(",");
+               //pull the ID from the book
+                int id = Integer.parseInt(bookInfo[0]);
+                //extract the title from the book information
+                String title = bookInfo[1];
+                //extract the author from the book information
+                String author = bookInfo[2];
+                //create a new book object
+                Book book = new Book(id, title, author);
+                //add the book to the collection of 'books'
+                addBook(book);
+            }
+            //catch io exceptions when reading the file
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}

@@ -1,0 +1,85 @@
+// Name:Tiffany Albelto
+// Course Name:Software Development 1 - 202410-CEN-3024C-16046
+// Date:August 31st, 2023
+
+
+
+// Class Name:Book
+
+// Overall Class Description:
+// This class represents a book in a library. It implements the 'Serializable' interface,
+// indicating that objects of this class can be serialized and deserialized. The book class has three private instance
+// variables: `id` (an integer), `title` (a string), and `author` (a string). It provides getter methods
+// for each of these variables to retrieve their values.
+
+//The class provides two constructors:
+//1. Default Constructor: This constructor initializes the `id`, `title`, and `author` variables to default values
+// (`0` for `id` and `null` for `title` and `author`).
+//2. Parameterized Constructor: This constructor takes arguments `id`, `title`, and `author` and sets the
+// corresponding instance variables to the provided values.
+
+//The class overrides the `toString` method, which returns a string representation of the book object.
+// The returned string is formatted to display the book's title, ID, and author.
+
+
+
+
+import java.io.Serializable;
+
+
+
+public class Book implements Serializable {
+
+
+    //variables -
+    private int id;
+    private String title;
+    private String author;
+
+//default constructor method book(int id,string title, string author) this initializes a 'book' object with default values for'id,'title',
+//'author'
+////Arguments: None
+////Return Value: None
+
+    public Book(){
+        id =0;
+        title =null;
+        author = null;
+    }
+
+    // constructor method to initialize the book object with its attributes id, title, author.
+    //Arguments: 'id'(int) the ID of a book, 'title'(string) the title of the book, 'author' (string) the author of
+    // the book
+    //Return Value: None
+
+    public Book(int id, String title, String author) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+    }
+// override the toString method to display the book details with no arguments but has a return value string - formatting
+    //the string representation of the 'book' object that includes its id, title, and author.
+
+
+    @Override
+    public String toString(){
+
+        // return a string representation of the book in the format request: id,title,author
+
+        return "\nTitle: " +title +"\nID: " +id +
+                "\nAuthor: " +author + "\n";
+    }
+//getter methods
+    public int getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+}
+

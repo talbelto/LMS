@@ -1,0 +1,112 @@
+// Name:Tiffany Albelto
+// Course Name:Software Development 1 - 202410-CEN-3024C-16046
+// Date:August 31st, 2023
+
+
+
+// Class Name:LibraryManagementSystem
+
+// Overall Class Description:
+// This program represents a library management system. It contains a main method
+// that provides a menu-driven interface for users to interact with the library. The class utilizes the
+// `Library` class to perform various library operations like adding books, removing books, listing the entire
+// book collection, and exiting the system.
+
+//The main method of this class initializes an instance of the `Library` class and loads books from a file.
+// It then prompts the user to select an option from the menu, reads their input using a `Scanner`,
+// and executes the corresponding action based on the selected option.The class handles user input using
+// a switch statement, and based on the user's choice. It performs the required actions by calling
+// appropriate methods from the `Library` class.
+
+//The options provided in the menu are as follows:
+//1. Add a new book: This option prompts the user to input a book ID, title, and author, and adds the book
+// to the library's collection.
+//2. Remove a book: This option prompts the user to input a book ID and removes the corresponding book
+// from the library's collection.
+//3. List all book collections: This option displays all the books currently stored in the library's collection.
+//4. End Session: This option exits the library management system.
+
+
+import java.io.IOException;
+import java.util.Scanner;
+
+public class LibraryManagementSystem {
+    public static void main(String[] args) throws IOException {
+
+        //create a new instance of the library
+        Library library = new Library();
+
+//BookCollection Pathway
+        library.loadBooks("/Users/tiffanyalbelto/Library/Mobile Documents/com~apple~TextEdit/Documents/ BookCollection.txt");
+
+        //load books from the "BookCollection.txt" file
+        library.loadBooksFromFile("BookCollection");
+
+
+
+        Scanner scanner = new Scanner(System.in);
+
+        //user options displayed
+        int choice;
+        do {
+            System.out.println("Welcome to the Library Management System");
+            System.out.println("                         ");
+            System.out.println("1. Add a new book");
+            System.out.println("                         ");
+            System.out.println("2. Remove a book");
+            System.out.println("                         ");
+            System.out.println("3. List all book collections");
+            System.out.println("                         ");
+            System.out.println("4. End Session");
+            System.out.println("                         ");
+            System.out.print("Please select the appropriate option: ");
+
+
+            //choice enables user to select the personal option base on requested function needed to execute, reads users input
+            choice = scanner.nextInt();
+
+
+            //switch is used to execute different actions based on user input
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter book ID: ");
+                    int id = scanner.nextInt();
+                    System.out.print("Enter book title: ");
+                    scanner.nextLine();
+                    String title = scanner.nextLine();
+                    System.out.print("Enter book author: ");
+                    String author = scanner.nextLine();
+                    Book newBook = new Book(id, title, author);
+                    library.addBook(newBook);
+                    System.out.println("This book is now added successfully!");
+                    break;
+                case 2:
+                    System.out.print("Please enter Book ID to remove from collection: ");
+                    int removeId = scanner.nextInt();
+                    boolean removed = library.removeBook(removeId);
+                    if (removed) {
+                        System.out.println("This book is now removed successfully!");
+                    } else {
+                        System.out.println("The following book entered is not found in the collection.");
+                    }
+                    break;
+                case 3:
+                    System.out.println("List of book collection:");
+                    library.listBooks();
+                    break;
+                case 4:
+                    System.out.println("Exiting the program...");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+            System.out.println();
+
+            //continue the loop until the user enters "exit"
+        } while (choice != 4);
+
+        scanner.close();
+    }
+
+    }
+
