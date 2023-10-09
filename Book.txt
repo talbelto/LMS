@@ -1,62 +1,93 @@
 // Name:Tiffany Albelto
 // Course Name:Software Development 1 - 202410-CEN-3024C-16046
-// Date:August 31st, 2023
+// Date:October 1st, 2023
 
 
 
 // Class Name:Book
+//Summary: This class represents a book entity in the library. It consists of properties such as title, author, barcode,
+//availability status, etc. It also has methods to get and set these properties.
 
-// Overall Class Description:
+// Class Description:
 // This class represents a book in a library. It implements the 'Serializable' interface,
 // indicating that objects of this class can be serialized and deserialized. The book class has three private instance
-// variables: `id` (an integer), `title` (a string), and `author` (a string). It provides getter methods
-// for each of these variables to retrieve their values.
+// variables: `barcode` (an integer), `title` (a string), `author` (a string), 'genre' (a string), 'status' (a string),
+// and 'dueDate'(a string). It provides getter methods for each of these variables to retrieve their values.
 
 //The class provides two constructors:
-//1. Default Constructor: This constructor initializes the `id`, `title`, and `author` variables to default values
-// (`0` for `id` and `null` for `title` and `author`).
-//2. Parameterized Constructor: This constructor takes arguments `id`, `title`, and `author` and sets the
-// corresponding instance variables to the provided values.
+//1. Default Constructor: This constructor initializes the `barcode`, `title`, `author`,genre,'status', and 'due date'
+// variables to default values (`0` for `barcode` and `null` for `title` and `author`,'status,and 'dueDate').
+//2. Parameterized Constructor: This constructor takes arguments `barcode`, `title`, `author`,genre,'status', and 'due date'
+// and sets the corresponding instance variables to the provided values.
 
 //The class overrides the `toString` method, which returns a string representation of the book object.
-// The returned string is formatted to display the book's title, ID, and author.
-
+// The returned string is formatted to display the book's title, barcode,author,and genre.
 
 
 
 import java.io.Serializable;
-
+import java.util.Date;
 
 
 public class Book implements Serializable {
 
 
     //variables -
-    private int id;
+
+    private int barcode;
     private String title;
     private String author;
+    private String genre;
+    private String status;
+    private String dueDate;
+    private boolean isCheckedOut;
 
-//default constructor method book(int id,string title, string author) this initializes a 'book' object with default values for'id,'title',
-//'author'
+
+
+
+
+//default constructor method book(int id,string title, string author,int barcode, string genre, string status,string dueDate)
+// this initializes a 'book' object with default values for 'id,'title','author','barcode,'genre','status','dueDate'
 ////Arguments: None
 ////Return Value: None
 
     public Book(){
-        id =0;
+
         title =null;
         author = null;
+        barcode = 0;
+        //id =0;
+        genre =null;
+        status =null;
+        dueDate =null;
+
     }
 
-    // constructor method to initialize the book object with its attributes id, title, author.
-    //Arguments: 'id'(int) the ID of a book, 'title'(string) the title of the book, 'author' (string) the author of
-    // the book
+
+
+
+
+
+    // constructor method to initialize the book object with its attributes barcode, title, author,genre,.status,due date
+    //Arguments: 'barcode'(int) the barcode of a book, 'title'(string) the title of the book, 'author' (string) the author of
+    // the book,'genre' (string)the genre or type of book,'status'(string) whether the book is check-in or out, 'due date' the
+    //day the book is to be returned back to library.
     //Return Value: None
 
-    public Book(int id, String title, String author) {
-        this.id = id;
+    public Book(int barcode, String title, String author, String genre, String status, String dueDate) {
+        this.barcode = barcode;
         this.title = title;
         this.author = author;
+        this.genre = genre;
+        this.status = status;
+        this.dueDate = dueDate;
+        this.isCheckedOut = false;
     }
+
+
+
+
+
 // override the toString method to display the book details with no arguments but has a return value string - formatting
     //the string representation of the 'book' object that includes its id, title, and author.
 
@@ -66,12 +97,21 @@ public class Book implements Serializable {
 
         // return a string representation of the book in the format request: id,title,author
 
-        return "\nTitle: " +title +"\nID: " +id +
-                "\nAuthor: " +author + "\n";
+        return "Book{" +
+                "barcode=" + barcode +
+                ", title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                ", genre='" + genre + '\'' +
+                ", status='" + status + '\'' +
+                ", dueDate='" + dueDate + '\'' +
+                ",Checked Out='" +isCheckedOut +'\''+
+                '}';
     }
+
 //getter methods
-    public int getId() {
-        return id;
+
+    public int getBarcode() {
+        return barcode;
     }
 
     public String getTitle() {
@@ -81,5 +121,42 @@ public class Book implements Serializable {
     public String getAuthor() {
         return author;
     }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getDueDate() {
+        return dueDate;
+    }
+
+
+
+    //setters
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setDueDate(String dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public void setCheckedOut(boolean checkedOut){
+        isCheckedOut = checkedOut;
+    }
+
+
+
+
+    public boolean isCheckedOut() {return isCheckedOut;
+    }
+
+
+
+
 }
 
