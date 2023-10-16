@@ -1,0 +1,70 @@
+import static org.junit.Assert.*;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+public class LibraryManagementSystemTest {
+    private Library library;
+    @Before
+    public void setUp() {
+        library = new Library();
+    }
+
+
+    @Test
+        public void testAddBook() {
+            Book book = new Book(456789, "To Kill a Mockingbird", "Harper Lee", "Fiction",
+                    "Available",
+                    null);
+            library.addBook(book);
+
+            assertEquals("Available", book.getStatus());
+        }
+
+        @Test
+        public void testRemoveBookByBarcode() {
+            Book book = new Book(123456, "The Great Gatsby", "F. Scott Fitzgerald", "Fiction",
+                    "Available", null);
+
+            library.addBook(book);
+
+            assertTrue(library.removeBookByBarcode(123456));
+            assertFalse(library.removeBookByBarcode(456));
+        }
+
+        @Test
+        public void testRemoveBook() {
+            Book book1 = new Book(123456, "The Great Gatsby", "F. Scott Fitzgerald", "Fiction",
+                    "Available", null);
+            Book book2 = new Book(456789, "To Kill a Mockingbird", "Harper Lee", "Fiction",
+                    "Available", null);
+            library.addBook(book1);
+            library.addBook(book2);
+
+            assertTrue(library.removeBook("The Great Gatsby"));
+            assertFalse(library.removeBook("Title"));
+        }
+
+        @Test
+        public void testCheckOutBook() {
+            Book book = new Book(101112, "The Catcher in the Rye", "J.D. Salinger", "Fiction",
+                    "Available", null);
+            library.addBook(book);
+            boolean checkedOut = library.checkoutBook("The Catcher in the Rye");
+          book.setStatus("checked out");
+          assertEquals("checked out",book.getStatus());
+          assertNull(book.getDueDate());
+        }
+
+        @Test
+        public void testCheckInBook() {
+            Book book = new Book(131415, "The Catcher in the Rye", "J.D. Salinger", "Fiction",
+                    "Available", "2022-01-01");
+          library.addBook(book);
+          library.checkinBook("The Catcher in the Rye");
+            assertEquals("checked - in", "checked - in");
+            assertNull(book.getDueDate());
+        }
+    }
+
