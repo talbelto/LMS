@@ -1,0 +1,175 @@
+
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+
+public class LMSGUI {
+    private JTextField fileTextField;
+    private JButton openFileButton;
+    private JButton removeTitleButton;
+    private JTextField removeBarcodeTextField;
+    private JButton removeBarcodeButton;
+    private JTextField removeTileTextField;
+    private JFormattedTextField checkoutTitleTextField;
+    private JButton checkoutButton;
+    private JButton checkinButton;
+    private JTextField checkinTitleTextField;
+    private JButton printDatabaseButton;
+    private JButton exitButton;
+
+    private Library library;
+    public LMSGUI() {
+        library = new Library();
+
+        openFileButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String fileName = fileTextField.getText();
+                library.loadBooksFromFile(fileName);
+                //JOptionPane.showMessageDialog(openFileButton,fileTextField.getText()+"");
+
+            }
+        });
+        removeBarcodeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int barcode = Integer.parseInt(removeBarcodeTextField.getText());
+                library.removeBookByBarcode(barcode);
+                //JOptionPane.showMessageDialog(removeBarcodeButton,removeBarcodeTextField.getText()+"");
+
+            }
+        });
+        removeTitleButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String title = removeTileTextField.getText();
+                //JOptionPane.showMessageDialog(removeTitleButton,removeTileTextField.getText()+"");
+                library.removeBookByTitle(title);
+            }
+        });
+        checkoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String title = checkoutTitleTextField.getText();
+                //JOptionPane.showMessageDialog(checkoutButton,checkoutTitleTextField.getText()+"");
+                library.checkoutBook(title);
+            }
+        });
+        checkinButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String title = checkinTitleTextField.getText();
+               // JOptionPane.showMessageDialog(checkinButton,checkinTitleTextField.getText()+"");
+                library.checkinBook(title);
+            }
+        });
+        printDatabaseButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                library.listBooks();//Call the listBooks()method to print the database
+            }
+        });
+        exitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(8);// Terminate the application
+
+            }
+        });
+//creating the frame and setting its properties
+        JFrame frame = new JFrame("Library Management System"); // Set the frame title
+        JPanel contentPane =new JPanel();
+        //set layout manager
+
+        contentPane.setLayout (new GridLayout(7,3));
+
+        frame.setContentPane(contentPane);// Set the root component of the frame
+
+        //adding components to the frame
+        contentPane.add(new JLabel("File Name"));
+        contentPane.add(fileTextField);
+        contentPane.add(openFileButton);
+
+        contentPane.add(new JLabel("Remove Book By Barcode"));
+        contentPane.add(removeBarcodeTextField);
+        contentPane.add(removeBarcodeButton);
+
+        contentPane.add(new JLabel("Remove Book By Tile"));
+        contentPane.add(removeTileTextField);
+        contentPane.add(removeTitleButton);
+
+        contentPane.add(new JLabel("Check- Out By Book Title"));
+        contentPane.add(checkoutTitleTextField);
+        contentPane.add(checkoutButton);
+
+        contentPane.add(new JLabel("Check- In By Book Title"));
+        contentPane.add(checkinTitleTextField);
+        contentPane.add(checkinButton);
+
+        contentPane.add(new JLabel(""));
+        contentPane.add(new JLabel(""));
+        contentPane.add(printDatabaseButton);
+
+        contentPane.add(new JLabel(""));
+        contentPane.add(exitButton);
+        contentPane.add(new JLabel(""));
+
+
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Set the default close operation
+        frame.pack(); // Pack the components
+        frame.setVisible(true); // Make the frame visible
+    }
+
+
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new LMSGUI(); // Create an instance of LMSGUI
+            }
+        });
+    }
+
+
+
+    public void loadBooksFromFile(String fileName){
+        // Implement logic to open file and add books to the LMS database
+        // Display error message if the file was not found
+    }
+
+    public void listBooks() {
+        // Implement logic to print the LMS database to the screen
+    }
+
+    public void removeBookByBarcode(int barcode) {
+        // Implement logic to remove a book from the LMS database by barcode
+        // Display a confirmation message if the book was deleted
+        // Display an error message if the barcode was not found
+
+    }
+
+    public void removeBookByTitle(String title) {
+        // Implement logic to remove a book from the LMS database by title
+        // Display a confirmation message if the book was deleted
+        // Display an error message if the title was not found
+    }
+
+    public void checkoutBook(String title) {
+        // Implement logic to check out a book from the LMS database by title
+        // Display a confirmation message
+        // Display an error message if the book is already checked out
+    }
+
+    public void checkinBook(String title) {
+        // Implement logic to check in a book to the LMS database by title
+        // Display a confirmation message
+    }
+}
+
+
+

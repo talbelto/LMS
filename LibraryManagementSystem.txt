@@ -38,6 +38,7 @@ import java.util.Scanner;
 
 
 
+
 public class LibraryManagementSystem {
     public static void main(String[] args) throws IOException {
 
@@ -45,10 +46,10 @@ public class LibraryManagementSystem {
         Library library = new Library();
 
 //BookCollection Pathway
-        library.loadBooks("/Users/tiffanyalbelto/Library/Mobile Documents/com~apple~TextEdit/Documents/ BookCollection.txt");
+        //library.loadBooks("/Users/tiffanyalbelto/Library/Mobile Documents/com~apple~TextEdit/Documents/BookCollection.txt");
 
         //load books from the "BookCollection.txt" file
-        library.loadBooksFromFile("BookCollection");
+        library.loadBooksFromFile("BookCollection.txt");
 
 
         Scanner scanner = new Scanner(System.in);
@@ -111,7 +112,13 @@ public class LibraryManagementSystem {
                 case 4: // Remove book from database
                     System.out.println("Enter barcode number or title of the book to remove: ");
                     String searchQuery = scanner.nextLine();
-                    boolean removed = library.removeBook(searchQuery);
+                    boolean removed = false;
+                    try{
+                        int barcode = Integer.parseInt(searchQuery);
+                        removed =library.removeBookByBarcode(Integer.valueOf(searchQuery));
+                    } catch (NumberFormatException e){
+                        removed =library.removeBookByTitle(searchQuery);
+                    }
                     if (removed) {
                         System.out.println("The following book is removed successfully!");
                         library.listBooks();
@@ -171,5 +178,6 @@ public class LibraryManagementSystem {
 
 
 }
+
 
 

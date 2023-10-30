@@ -26,7 +26,6 @@
 
 
 import java.io.Serializable;
-import java.util.Date;
 
 
 public class Book implements Serializable {
@@ -41,6 +40,8 @@ public class Book implements Serializable {
     private String status;
     private String dueDate;
     private boolean isCheckedOut;
+    //private int bookCount;
+
 
 
 
@@ -60,6 +61,8 @@ public class Book implements Serializable {
         genre =null;
         status =null;
         dueDate =null;
+        //bookCount=0;
+
 
     }
 
@@ -105,6 +108,7 @@ public class Book implements Serializable {
                 ", status='" + status + '\'' +
                 ", dueDate='" + dueDate + '\'' +
                 ",Checked Out='" +isCheckedOut +'\''+
+              //  ",Book Count=" +bookCount +'\''+
                 '}';
     }
 
@@ -134,7 +138,9 @@ public class Book implements Serializable {
         return dueDate;
     }
 
-
+    //public int getBookCount() {
+        //return bookCount;
+    //}
 
     //setters
     public void setStatus(String status) {

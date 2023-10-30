@@ -1,6 +1,4 @@
 import static org.junit.Assert.*;
-
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,8 +13,7 @@ public class LibraryManagementSystemTest {
     @Test
         public void testAddBook() {
             Book book = new Book(456789, "To Kill a Mockingbird", "Harper Lee", "Fiction",
-                    "Available",
-                    null);
+                    "Available", null);
             library.addBook(book);
 
             assertEquals("Available", book.getStatus());

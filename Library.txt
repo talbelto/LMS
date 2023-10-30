@@ -31,6 +31,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
 import java.util.Calendar;
+import javax.swing.JOptionPane;
+import java.util.Iterator;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.FileNotFoundException;
+
 
 
 // Declaring a private list object 'books' to store books.
@@ -54,6 +60,7 @@ public class Library implements Serializable {
     //Return Value: None
     public void addBook(Book book) {
         books.add(book);
+        System.out.println("The following book is added successfully: '"+book+"'");
     }
 
 
@@ -65,20 +72,26 @@ public class Library implements Serializable {
     // in the list of books.
     // Return Value: boolean- True if the book is successfully removed, false otherwise.
     public boolean removeBook(String bookTitle) {
-        //check if the book title exists in the list of books
-        if (books.contains(bookTitle)) {
-            //if book is found remove it from the list
-            books.remove(bookTitle);
-            //print a message indicating that the book has been removed
-            System.out.println(" The following book '" + bookTitle + "' is now removed from the library.");
-            //return true to indicate successful removal
-            return true;
-        } else {
+        for (Book book:books) {
+            if(book.getTitle().equals(bookTitle)){
+                books.remove(book);
+                System.out.println(" The following book '" + bookTitle + "' is now removed from the library");
+                return true;
+
+            }
+        }
+
+        //print a message indicating that the book has been removed
+       //System.out.println(" The following book '" + bookTitle + "' is now removed from the library.");
+
+
+        //return true to indicate successful removal
+
             System.out.println("The following book  '" + bookTitle + "' is not found in the library.");
             //return false if the book is not found, print an error message
             return false;
         }
-    }
+
 
     // Method: calculateDueDat
     //Purpose: To calculate the due date for an item,vit adds 4 weeks to the current date using Calendar class and
@@ -106,6 +119,7 @@ public class Library implements Serializable {
                     book.setStatus("checked out");
                     // Set due date 4 weeks from the current date (implementation required)
                     book.setDueDate(String.valueOf(calculateDueDate()));
+                    System.out.println("The following book '" + title + "' is now checked out.");
                     return true;
 
 
@@ -132,7 +146,7 @@ public class Library implements Serializable {
             if (book.getTitle().equals(title)) {
                 book.setStatus("checked in");
                 book.setDueDate(null);
-                System.out.println("The following book is successfully checked in!");
+                System.out.println("The following book '" + title + "'is successfully checked in!");
                 return true;
             }
         }
@@ -151,6 +165,7 @@ public class Library implements Serializable {
             for (Book book : books) {
                 if (book.getBarcode() == barcode) {
                     books.remove(book);
+                    System.out.println(" The following book '" + barcode+ "' is now removed from the library.");
                     return true;
 
                 }
@@ -159,7 +174,16 @@ public class Library implements Serializable {
         }
 
 
+    public boolean removeBookByTitle ( String title){
+        for (Book book : books) {
+            if (book.getTitle().equals(title)) {
+                books.remove(book);
+                return true;
 
+            }
+        }
+        return false;
+    }
 
 
         //Method: `removeBook(int ID)`
@@ -167,18 +191,18 @@ public class Library implements Serializable {
         //Arguments: `barcode` - The ID of the book to be removed.
         //Return Value: `true` if the book with the provided barcode is found and removed successfully; `false` otherwise.
 
-        //public boolean removeBook(int id){
-            //Iterator<Book> iterator = books.iterator();
+        //public boolean removeBook(int barcode){
+           // Iterator<Book> iterator = books.iterator();
             //while (iterator.hasNext()) {
-                //Book book = iterator.next();
-                //if (book.getId() == id) {
-                    //iterator.remove();
+               // Book book = iterator.next();
+                //if (book.getBarcode() == barcode) {
+                   // iterator.remove();
 
-                    //Return true if the book is found using the id provided by user and removed it.
+                    //Return true if the book is found using the removeBook() provided by user and removed it.
                     //return true;
-                //}
+               // }
             //}
-            // Return false if the book's id is not found in the collection of books.
+            // Return false if the book's barcode is not found in the collection of books.
            // return false;
         //}
 
@@ -198,8 +222,23 @@ public class Library implements Serializable {
                         ", Author: " + book.getAuthor()+
                         ", Genre: "+ book.getGenre()+
                         ", Status: " + book.getStatus()+
-                        ", Due Date: " + book.getDueDate());
+                        ", Due Date: " + book.getDueDate()+"");
+                        //", Book Count: " +book.getBookCount());
+
             }
+            String text = ("Printing Database: \n");
+            //iterate through each book in the 'books' list
+            for (Book book : books) {
+                text +=("\n\nID: " + book.getBarcode() +
+                        ", Title: " + book.getTitle() +
+                        ", Author: " + book.getAuthor()+
+                        ", Genre: "+ book.getGenre()+
+                        ", Status: " + book.getStatus()+
+                        ", Due Date: " + book.getDueDate()+"");
+                //", Book Count: " +book.getBookCount());
+
+            }
+            JOptionPane.showMessageDialog(null,text);
         }
         //Method: `loadBooks(String filePath)`
         //Purpose: Loads books from a file and adds them to the library.
@@ -241,10 +280,13 @@ public class Library implements Serializable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+
+
+            }
         }
 
 
-        }
 
 
 
