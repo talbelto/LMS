@@ -150,6 +150,7 @@ public class Library implements Serializable {
                 return true;
             }
         }
+       
         return false;
     }
 
@@ -170,6 +171,7 @@ public class Library implements Serializable {
 
                 }
             }
+            
             return false;
         }
 
@@ -178,6 +180,7 @@ public class Library implements Serializable {
         for (Book book : books) {
             if (book.getTitle().equals(title)) {
                 books.remove(book);
+                System.out.println(" The following book '" + title+ "' is now removed from the library.");
                 return true;
 
             }
@@ -285,7 +288,6 @@ public class Library implements Serializable {
 
             }
         }
-
 
 
 
