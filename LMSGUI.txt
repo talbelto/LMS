@@ -5,25 +5,34 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.*;
 
 
 public class LMSGUI {
+    Connection connection;
     private JTextField fileTextField;
     private JButton openFileButton;
     private JButton removeTitleButton;
     private JTextField removeBarcodeTextField;
     private JButton removeBarcodeButton;
     private JTextField removeTileTextField;
-    private JFormattedTextField checkoutTitleTextField;
+    private JTextField checkoutTitleTextField;
     private JButton checkoutButton;
     private JButton checkinButton;
     private JTextField checkinTitleTextField;
+    private JTextField textField1;
     private JButton printDatabaseButton;
+    private JTextField textField2;
     private JButton exitButton;
+    private JTextArea display;
+
 
     private Library library;
+
+
     public LMSGUI() {
         library = new Library();
+
 
         openFileButton.addActionListener(new ActionListener() {
             @Override
@@ -37,8 +46,11 @@ public class LMSGUI {
         removeBarcodeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //JOptionPane.showMessageDialog(null, "Test");
                 int barcode = Integer.parseInt(removeBarcodeTextField.getText());
-                library.removeBookByBarcode(barcode);
+                //library.removeBookByBarcode(barcode);
+                removeBookByBarcode(barcode);
+                //JOptionPane.showMessageDialog(null, "test");
                 //JOptionPane.showMessageDialog(removeBarcodeButton,removeBarcodeTextField.getText()+"");
 
             }
@@ -48,7 +60,8 @@ public class LMSGUI {
             public void actionPerformed(ActionEvent e) {
                 String title = removeTileTextField.getText();
                 //JOptionPane.showMessageDialog(removeTitleButton,removeTileTextField.getText()+"");
-                library.removeBookByTitle(title);
+                //library.removeBookByTitle(title);
+                removeBookByTitle(title);
             }
         });
         checkoutButton.addActionListener(new ActionListener() {
@@ -56,74 +69,142 @@ public class LMSGUI {
             public void actionPerformed(ActionEvent e) {
                 String title = checkoutTitleTextField.getText();
                 //JOptionPane.showMessageDialog(checkoutButton,checkoutTitleTextField.getText()+"");
-                library.checkoutBook(title);
+                //library.checkoutBook(title);
+                checkoutBook(title);
+                //JOptionPane.showMessageDialog(null, "test");
             }
         });
         checkinButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String title = checkinTitleTextField.getText();
-               // JOptionPane.showMessageDialog(checkinButton,checkinTitleTextField.getText()+"");
-                library.checkinBook(title);
+                // JOptionPane.showMessageDialog(checkinButton,checkinTitleTextField.getText()+"");
+                //library.checkinBook(title);
+                checkinBook(title);
+                //JOptionPane.showMessageDialog(null, "test");
             }
         });
         printDatabaseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                library.listBooks();//Call the listBooks()method to print the database
+                //library.listBooks();//Call the listBooks()method to print the database
+                listBooks();
             }
         });
+
+
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.exit(8);// Terminate the application
 
+
             }
         });
 //creating the frame and setting its properties
         JFrame frame = new JFrame("Library Management System"); // Set the frame title
-        JPanel contentPane =new JPanel();
+        JPanel contentPane = new JPanel();
         //set layout manager
+        JPanel buttonPanel = new JPanel();
+        JPanel displayPanel = new JPanel();
+        contentPane.setLayout(new BorderLayout());
+        displayPanel.setLayout(new BorderLayout());
+        contentPane.add(buttonPanel, BorderLayout.NORTH);
+        contentPane.add(displayPanel, BorderLayout.SOUTH);
 
-        contentPane.setLayout (new GridLayout(7,3));
+        display = new JTextArea(100, 100);
+
+        buttonPanel.setLayout(new GridLayout(7, 3));
 
         frame.setContentPane(contentPane);// Set the root component of the frame
 
+        //displayPanel.add(display,BorderLayout.NORTH);
+        contentPane.add(display, BorderLayout.CENTER);
         //adding components to the frame
-        contentPane.add(new JLabel("File Name"));
-        contentPane.add(fileTextField);
-        contentPane.add(openFileButton);
+        buttonPanel.setLayout(new GridLayout(7, 3));
+        buttonPanel.add(new JLabel("File Name"));
+        buttonPanel.add(fileTextField);
+        buttonPanel.add(openFileButton);
 
-        contentPane.add(new JLabel("Remove Book By Barcode"));
-        contentPane.add(removeBarcodeTextField);
-        contentPane.add(removeBarcodeButton);
+        buttonPanel.add(new JLabel("Remove Book By Barcode"));
+        buttonPanel.add(removeBarcodeTextField);
+        buttonPanel.add(removeBarcodeButton);
 
-        contentPane.add(new JLabel("Remove Book By Tile"));
-        contentPane.add(removeTileTextField);
-        contentPane.add(removeTitleButton);
+        buttonPanel.add(new JLabel("Remove Book By Tile"));
+        buttonPanel.add(removeTileTextField);
+        buttonPanel.add(removeTitleButton);
 
-        contentPane.add(new JLabel("Check- Out By Book Title"));
-        contentPane.add(checkoutTitleTextField);
-        contentPane.add(checkoutButton);
+        buttonPanel.add(new JLabel("Check- Out By Book Title"));
+        buttonPanel.add(checkoutTitleTextField);
+        buttonPanel.add(checkoutButton);
 
-        contentPane.add(new JLabel("Check- In By Book Title"));
-        contentPane.add(checkinTitleTextField);
-        contentPane.add(checkinButton);
+        buttonPanel.add(new JLabel("Check- In By Book Title"));
+        buttonPanel.add(checkinTitleTextField);
+        buttonPanel.add(checkinButton);
 
-        contentPane.add(new JLabel(""));
-        contentPane.add(new JLabel(""));
-        contentPane.add(printDatabaseButton);
+        buttonPanel.add(new JLabel(""));
+        buttonPanel.add(new JLabel(""));
+        buttonPanel.add(printDatabaseButton);
 
-        contentPane.add(new JLabel(""));
-        contentPane.add(exitButton);
-        contentPane.add(new JLabel(""));
+        buttonPanel.add(new JLabel(""));
+        buttonPanel.add(exitButton);
+        buttonPanel.add(new JLabel(""));
 
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Set the default close operation
         frame.pack(); // Pack the components
         frame.setVisible(true); // Make the frame visible
-    }
+        display.setVisible(true);
+        displayPanel.setVisible(true);
 
+
+        try {
+            connection = DriverManager.getConnection(
+                    "jdbc:mysql://127.0.0.1:3306/LMS",
+                    "root", "Chance24!"
+
+            );
+
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT *FROM LibraryCollection");
+            while (resultSet.next()) {
+                System.out.println(resultSet.getString("Barcode"));
+                System.out.println(resultSet.getString("Title"));
+                System.out.println(resultSet.getString("Author"));
+                System.out.println(resultSet.getString("Genre"));
+                System.out.println(resultSet.getString("Book_Status"));
+                System.out.println(resultSet.getString("DueDate"));
+                int b = (resultSet.getInt("Barcode"));
+                //display.setText(resultSet.getInt("Barcode"));
+                //display.setText("hello world");
+
+                //display.append(String.valueOf(resultSet.getInt("Barcode")));
+                //display.append(resultSet.getString("Title"));
+                //display.append(resultSet.getString("Author"));
+                //display.append(resultSet.getString("Genre"));
+                //display.append(resultSet.getString("Book_Status"));
+                // display.append(resultSet.getString("DueDate"));
+
+
+                display.append(String.valueOf(resultSet.getInt("Barcode")));
+                display.append("\t");
+                display.append(resultSet.getString("Title"));
+                display.append("\t\t\t");
+                display.append(resultSet.getString("Author"));
+                display.append("\t");
+                display.append(resultSet.getString("Genre"));
+                display.append("\t");
+                display.append(resultSet.getString("Book_Status"));
+                display.append("\t");
+                display.append(resultSet.getString("DueDate"));
+                display.append("\n");
+
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     public static void main(String[] args) {
@@ -136,39 +217,143 @@ public class LMSGUI {
     }
 
 
-
-    public void loadBooksFromFile(String fileName){
+    public void loadBooksFromFile(String fileName) {
         // Implement logic to open file and add books to the LMS database
         // Display error message if the file was not found
     }
 
     public void listBooks() {
+        try{
         // Implement logic to print the LMS database to the screen
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT *FROM LibraryCollection");
+        display.setText("");
+        while (resultSet.next()) {
+            System.out.println(resultSet.getString("Barcode"));
+            System.out.println(resultSet.getString("Title"));
+            System.out.println(resultSet.getString("Author"));
+            System.out.println(resultSet.getString("Genre"));
+            System.out.println(resultSet.getString("Book_Status"));
+            System.out.println(resultSet.getString("DueDate"));
+            int b = (resultSet.getInt("Barcode"));
+
+            
+
+            display.append(String.valueOf(resultSet.getInt("Barcode")));
+            display.append("\t");
+            display.append(resultSet.getString("Title"));
+            display.append("\t");
+            display.append(resultSet.getString("Author"));
+            display.append("\t\t");
+            display.append(resultSet.getString("Genre"));
+            display.append("\t");
+            display.append(resultSet.getString("Book_Status"));
+            display.append("\t");
+            display.append(resultSet.getString("DueDate"));
+            display.append("\n");
+
+
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+}
+
 
     public void removeBookByBarcode(int barcode) {
         // Implement logic to remove a book from the LMS database by barcode
         // Display a confirmation message if the book was deleted
         // Display an error message if the barcode was not found
-
+        //JOptionPane.showMessageDialog(null, "Error");
+        try {
+            PreparedStatement statement = connection.prepareStatement("DELETE FROM LibraryCollection WHERE barcode = ?");
+            statement.setInt(1, barcode);
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Book removed successfully.");
+                JOptionPane.showMessageDialog(null, "Book successfully removed");
+            } else {
+                System.out.println("Book not found.");
+                JOptionPane.showMessageDialog(null, "Book not found");
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error");
+            e.printStackTrace();
+        }
+        listBooks();
     }
+
 
     public void removeBookByTitle(String title) {
         // Implement logic to remove a book from the LMS database by title
         // Display a confirmation message if the book was deleted
         // Display an error message if the title was not found
+        try {
+            PreparedStatement statement = connection.prepareStatement("DELETE FROM LibraryCollection WHERE title = ?");
+            statement.setString(1, title);
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Book removed successfully.");
+                JOptionPane.showMessageDialog(null, "Book successfully removed");
+            } else {
+                System.out.println("Book not found.");
+                JOptionPane.showMessageDialog(null, "Book not found");
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error");
+            e.printStackTrace();
+        }
+        listBooks();
     }
+
+
 
     public void checkoutBook(String title) {
         // Implement logic to check out a book from the LMS database by title
         // Display a confirmation message
         // Display an error message if the book is already checked out
+        try {
+            PreparedStatement statement = connection.prepareStatement("UPDATE LibraryCollection SET Book_Status = 'checked out', DueDate = ? WHERE title = ?");
+            statement.setString(1, "2024-12-31"); // Set a default due date for simplicity
+            statement.setString(2, title);
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Book checked out successfully.");
+                JOptionPane.showMessageDialog(null, "Book checked out successfully");
+            } else {
+                System.out.println("Book not found.");
+                JOptionPane.showMessageDialog(null, "Book not found.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        listBooks();
     }
+
 
     public void checkinBook(String title) {
         // Implement logic to check in a book to the LMS database by title
-        // Display a confirmation message
+        try {
+            PreparedStatement statement = connection.prepareStatement("UPDATE LibraryCollection SET Book_Status = 'checked in', DueDate = ? WHERE title= ?");
+            statement.setString(1, null); // Set a default due date for simplicity
+            statement.setString(2, title);
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Book checked in successfully.");
+                JOptionPane.showMessageDialog(null, "Book checked in successfully.");
+
+            } else {
+                System.out.println("Book not found.");
+                JOptionPane.showMessageDialog(null, "Book not found.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        listBooks();
     }
+
+
+
 }
 
 
