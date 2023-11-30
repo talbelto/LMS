@@ -1,23 +1,22 @@
-
-// Name:Tiffany Albelto
-// Course Name:Software Development 1 - 202410-CEN-3024C-16046
-// Date:October 1st, 2023
-
-
-
-// Class Name:Library
-//Summary:This class represents the library itself. It contains methods to load books from a file, display the books in
-//the database, remove a book by barcode or title, check out a book, and check in a book. It maintains a collection of
-// books and performs operations on them.
+/**
+ * Name:Tiffany Albelto
+ * Course Name:Software Development 1 - 202410-CEN-3024C-16046
+ * Date:October 1st, 2023
 
 
-// Class Description:
-//This class represents a library that contains a collection of books. It implements the `Serializable`
-// interface, indicating that objects of this class can be serialized and deserialized.The `Library` class
-// has one private instance variable: `books`, which is a list of `Book` objects. It provides methods
-// to add a book to the library, remove a book from the library by barcode, list all books in the library,
-// load books from a file and Check in and Check out books. The `Library` class primarily focuses on managing the collection of `Book`objects
-// and providing functionality to add, remove, list, and load books in the library.
+ * Class Name:Library
+ * Summary:This class represents the library itself. It contains methods to load books from a file, display the books in
+ * the database, remove a book by barcode or title, check out a book, and check in a book. It maintains a collection of
+ * books and performs operations on them.
+
+ * Class Description:
+ * This class represents a library that contains a collection of books. It implements the `Serializable`
+ * interface, indicating that objects of this class can be serialized and deserialized.The `Library` class
+ * has one private instance variable: `books`, which is a list of `Book` objects. It provides methods
+ * to add a book to the library, remove a book from the library by barcode, list all books in the library,
+ * load books from a file and Check in and Check out books. The `Library` class primarily focuses on managing the collection
+ * of `Book`objects and providing functionality to add, remove, list, and load books in the library.
+ */
 
 
 
@@ -32,92 +31,108 @@ import java.util.List;
 import java.util.Date;
 import java.util.Calendar;
 import javax.swing.JOptionPane;
-import java.util.Iterator;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.FileNotFoundException;
 
 
 
-// Declaring a private list object 'books' to store books.
+/**
+ * Declaring a private list object 'books' to store books.
+ */
 public class Library implements Serializable {
-    private List<Book> books;
+    private final List<Book> books;
 
 
-    // Default Constructor: `Library()`
-    ////Purpose: Initializes a `Library` object by creating a new ArrayList to store the books.
-    ////Arguments: None
-    ////Return Value: None
+    /**
+     *  Default Constructor: `Library()`
+     *  Purpose: Initializes a `Library` object by creating a new ArrayList to store the books.
+     *  Arguments: None
+     *  Return Value: None
+     */
     public Library() {
         books = new ArrayList<>();
     }
 
 
-    //`addBook` method: Adds a book to the library manually.
-    //Method: `addBook(Book book)`
-    //Purpose: Adds a book to the library by adding it to the `books` list.
-    //Arguments: `book` - The `Book` object to be added to the library.
-    //Return Value: None
+    /**
+     * `addBook` method: Adds a book to the library manually.
+     * Method: `addBook(Book book)`
+     * Purpose: Adds a book to the library by adding it to the `books` list.
+     * Arguments: `book` - The `Book` object to be added to the library.
+     * Return Value: None
+     * @param book is the argument
+     */
     public void addBook(Book book) {
         books.add(book);
         System.out.println("The following book is added successfully: '"+book+"'");
     }
 
 
-    //Method to remove a book from the library based on its title
-    // Method: removeBook
-    //Purpose: To remove a book from the library based on its title. It checks if the book is present in the list of books,
-    // and if so, removes it from the list.
-    //Argument: String bookTitle - the title of the book to be removed. The method uses this title to search for the book
-    // in the list of books.
-    // Return Value: boolean- True if the book is successfully removed, false otherwise.
+    /**
+     * Method to remove a book from the library based on its title
+     * Method: removeBook
+     * Purpose: To remove a book from the library based on its title. It checks if the book is present in the list of books,
+     * and if so, removes it from the list.
+     * Argument: String bookTitle - the title of the book to be removed. The method uses this title to search for the book
+     * in the list of books.
+     * @param bookTitle argument
+     * Return Value: boolean True if the book is successfully removed, false otherwise.
+     * @return boolean
+     */
     public boolean removeBook(String bookTitle) {
         for (Book book:books) {
             if(book.getTitle().equals(bookTitle)){
                 books.remove(book);
                 System.out.println(" The following book '" + bookTitle + "' is now removed from the library");
+
+                /*return true to indicate successful removal*/
                 return true;
 
             }
         }
 
         //print a message indicating that the book has been removed
-       //System.out.println(" The following book '" + bookTitle + "' is now removed from the library.");
+        //System.out.println(" The following book '" + bookTitle + "' is now removed from the library.");
 
 
-        //return true to indicate successful removal
+        System.out.println("The following book  '" + bookTitle + "' is not found in the library.");
 
-            System.out.println("The following book  '" + bookTitle + "' is not found in the library.");
-            //return false if the book is not found, print an error message
-            return false;
-        }
+        /*return false if the book is not found, print an error message*/
+        return false;
+    }
 
 
-    // Method: calculateDueDat
-    //Purpose: To calculate the due date for an item,vit adds 4 weeks to the current date using Calendar class and
-    // returns the result date as the due date.
-    //Argument: none
-    //Return Value: Date -the calculated due date
+    /**
+     * Method: calculateDueDat
+     * Purpose: To calculate the due date for an item,vit adds 4 weeks to the current date using Calendar class and
+     * returns the result date as the due date.
+     * Argument: none
+     * Return Value: Date -the calculated due date
+     */
     public Date calculateDueDate() {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.WEEK_OF_YEAR, 4);
         return calendar.getTime();
 
     }
-    // `checkoutBook` method: Changes the status of a book to "checked out" and sets the due date.
-    // Method: checkoutBook
-    //Purpose: The purpose of this method is to search for a book with the given title in the list of books. If the book
-    // is found and its status is "checked in", it sets the book's status to "checked out" and sets the due date 4 weeks from
-    // the current date.
-    //Argument: String title The title of the book to be checked out. The method uses this title to search for a matching
-    // book in the list.
-    //Return Value: boolean - true if the book is successfully checked out, false otherwise.
+
+    /**
+     * `checkoutBook` method: Changes the status of a book to "checked out" and sets the due date.
+     *  Method: checkoutBook
+     *  Purpose: The purpose of this method is to search for a book with the given title in the list of books. If the book
+     *  is found and its status is "checked in", it sets the book's status to "checked out" and sets the due date 4 weeks from
+     *  the current date.
+     *  Argument: String title The title of the book to be checked out. The method uses this title to search for a matching
+     *  book in the list.
+     *  Return Value: boolean - true if the book is successfully checked out, false otherwise.
+     */
     public boolean checkoutBook(String title) {
         for (Book book : books) {
             if (book.getTitle().equals(title)) {
                 if (book.getStatus().equals("checked in")) {
                     book.setStatus("checked out");
-                    // Set due date 4 weeks from the current date (implementation required)
+
+                    /* Set due date 4 weeks from the current date (implementation required)*/
+
+
                     book.setDueDate(String.valueOf(calculateDueDate()));
                     System.out.println("The following book '" + title + "' is now checked out.");
                     return true;
@@ -134,13 +149,16 @@ public class Library implements Serializable {
     }
 
 
-    //Method: checkinBook - is responsible for checking in a book to the library
-    //Purpose: is to search for a book with the given title in the list of books. If the book is found,it sets the book's
-    //status to "checked in" and clears the due date.
-    //Argument: String title - this argument represents the title of the book that needs to be checked in. The method uses
-    //this title to search for a matching book in the list.
-    //Return Value: boolean - the method returns a boolean value. It returns 'true' if the book with the specified title
-    //is successfully checked in. If no book with the specified title exists, it returns 'false'.
+    /**
+     * Method: checkinBook - is responsible for checking in a book to the library
+     * Purpose: is to search for a book with the given title in the list of books. If the book is found,it sets the book's
+     * status to "checked in" and clears the due date.
+     * Argument: String title - this argument represents the title of the book that needs to be checked in. The method uses
+     * this title to search for a matching book in the list.
+     * Return Value: boolean - the method returns a boolean value. It returns 'true' if the book with the specified title
+     * is successfully checked in. If no book with the specified title exists, it returns 'false'.
+     * @param title this argument represents the title of the book that needs to be checked in.
+     */
     public boolean checkinBook(String title) {
         for (Book book : books) {
             if (book.getTitle().equals(title)) {
@@ -150,31 +168,36 @@ public class Library implements Serializable {
                 return true;
             }
         }
-       
+
         return false;
     }
 
 
+    /**
+     * Method: `removeBookByBarcode (Book book)`
+     * Purpose: removes a book from the library using a barcode
+     * Arguments: `book` - The `Book` object to be removed from  the library.
+     * Return Value: None
+     */
 
+    public boolean removeBookByBarcode ( int barcode){
+        for (Book book : books) {
+            if (book.getBarcode() == barcode) {
+                books.remove(book);
+                System.out.println(" The following book '" + barcode+ "' is now removed from the library.");
+                return true;
 
-        //Method: `removeBookByBarcode (Book book)`
-        //Purpose: removes a book from the library using a barcode
-        //Arguments: `book` - The `Book` object to be removed from  the library.
-        //Return Value: None
-
-        public boolean removeBookByBarcode ( int barcode){
-            for (Book book : books) {
-                if (book.getBarcode() == barcode) {
-                    books.remove(book);
-                    System.out.println(" The following book '" + barcode+ "' is now removed from the library.");
-                    return true;
-
-                }
             }
-            
-            return false;
         }
 
+        return false;
+    }
+    /**
+     * Method: `removeBookByTitle (Book book)`
+     * Purpose: removes a book from the library using a title
+     * Arguments: `book` - The `Book` object to be removed from  the library.
+     * Return Value: None
+     */
 
     public boolean removeBookByTitle ( String title){
         for (Book book : books) {
@@ -189,106 +212,116 @@ public class Library implements Serializable {
     }
 
 
-        //Method: `removeBook(int ID)`
-        //Purpose: Removes a book from the library based on its ID.
-        //Arguments: `barcode` - The ID of the book to be removed.
-        //Return Value: `true` if the book with the provided barcode is found and removed successfully; `false` otherwise.
+    //Method: `removeBook(int ID)`
+    //Purpose: Removes a book from the library based on its ID.
+    //Arguments: `barcode` - The ID of the book to be removed.
+    //Return Value: `true` if the book with the provided barcode is found and removed successfully; `false` otherwise.
 
-        //public boolean removeBook(int barcode){
-           // Iterator<Book> iterator = books.iterator();
-            //while (iterator.hasNext()) {
-               // Book book = iterator.next();
-                //if (book.getBarcode() == barcode) {
-                   // iterator.remove();
+    //public boolean removeBook(int barcode){
+    // Iterator<Book> iterator = books.iterator();
+    //while (iterator.hasNext()) {
+    // Book book = iterator.next();
+    //if (book.getBarcode() == barcode) {
+    // iterator.remove();
 
-                    //Return true if the book is found using the removeBook() provided by user and removed it.
-                    //return true;
-               // }
-            //}
-            // Return false if the book's barcode is not found in the collection of books.
-           // return false;
-        //}
-
-
+    //Return true if the book is found using the removeBook() provided by user and removed it.
+    //return true;
+    // }
+    //}
+    // Return false if the book's barcode is not found in the collection of books.
+    // return false;
+    //}
 
 
+    /**
+     * Method: `listBooks()`
+     * Purpose: Prints the details of all the books in the library.
+     * Arguments: None
+     * Return Value: None
+     */
+    public void listBooks() {
+        System.out.println("Printing Database: ");
+        for (Book book : books) {
+            System.out.println("ID: " + book.getBarcode() +
+                    ", Title: " + book.getTitle() +
+                    ", Author: " + book.getAuthor()+
+                    ", Genre: "+ book.getGenre()+
+                    ", Status: " + book.getStatus()+
+                    ", Due Date: " + book.getDueDate()+"");
+            //", Book Count: " +book.getBookCount());
 
-        //Method: `listBooks()`
-        //Purpose: Prints the details of all the books in the library.
-        //Arguments: None
-        //Return Value: None
-        public void listBooks() {
-            System.out.println("Printing Database: ");
-            for (Book book : books) {
-                System.out.println("ID: " + book.getBarcode() +
-                        ", Title: " + book.getTitle() +
-                        ", Author: " + book.getAuthor()+
-                        ", Genre: "+ book.getGenre()+
-                        ", Status: " + book.getStatus()+
-                        ", Due Date: " + book.getDueDate()+"");
-                        //", Book Count: " +book.getBookCount());
-
-            }
-            String text = ("Printing Database: \n");
-            //iterate through each book in the 'books' list
-            for (Book book : books) {
-                text +=("\n\nID: " + book.getBarcode() +
-                        ", Title: " + book.getTitle() +
-                        ", Author: " + book.getAuthor()+
-                        ", Genre: "+ book.getGenre()+
-                        ", Status: " + book.getStatus()+
-                        ", Due Date: " + book.getDueDate()+"");
-                //", Book Count: " +book.getBookCount());
-
-            }
-            JOptionPane.showMessageDialog(null,text);
         }
-        //Method: `loadBooks(String filePath)`
-        //Purpose: Loads books from a file and adds them to the library.
-        //Arguments: `filePath` - The pathway of the file to be loaded.
-        //Return Value: None (throws an `IOException` if there is an error in file reading).
+        String text = ("Printing Database: \n");
+        /* iterate through each book in the 'books' list*/
+        for (Book book : books) {
+            text +=("\n\nID: " + book.getBarcode() +
+                    ", Title: " + book.getTitle() +
+                    ", Author: " + book.getAuthor()+
+                    ", Genre: "+ book.getGenre()+
+                    ", Status: " + book.getStatus()+
+                    ", Due Date: " + book.getDueDate()+"");
+            //", Book Count: " +book.getBookCount());
 
-        public void loadBooks(String filePath){
-            System.out.println("Loading books from file: " + filePath);
+        }
+        JOptionPane.showMessageDialog(null,text);
+    }
+
+    /**
+     * Method: `loadBooks(String filePath)`
+     * Purpose: Loads books from a file and adds them to the library.
+     * Arguments: `filePath` - The pathway of the file to be loaded.
+     * @param filePath
+     * Return Value: None (throws an `IOException` if there is an error in file reading).
+     */
+
+    public void loadBooks(String filePath){
+        System.out.println("Loading books from file: " + filePath);
+    }
+
+    /**
+     * loadBooksFromFile` method: Reads book information from a comma-delimited text file and adds each book to the library.
+     * Method to load books to a file and adds them to the library. the method takes a 'fileName' parameter which represents
+     * the pathway of the file to be loaded.
+     */
+    public void loadBooksFromFile(String fileName) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+
+            /* Read each line from the file*/
+            while ((line = reader.readLine()) != null) {
+
+                /*Split the line by commas to get book information*/
+                String[] bookInfo = line.split(",");
+
+                /*Pull the barcode number from the book */
+                int barcode = Integer.parseInt(bookInfo[0]);
+
+                /* Extract the title from the book information*/
+                String title = bookInfo[1];
+
+                /*Extract the author from the book information*/
+                String author = bookInfo[2];
+
+                /*Extract the genre from the book information*/
+                String genre = bookInfo[3];
+
+                /*Extract the status from the book information*/
+                String status = bookInfo[4];
+
+                /* Extract the due date from the book information*/
+                String dueDate = bookInfo[5];
+
+                /* Create a new book object*/
+                Book book = new Book(barcode, title, author, genre, status, dueDate);
+
+                /* Add the book to the collection of 'books'*/
+                addBook(book);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        //loadBooksFromFile` method: Reads book information from a comma-delimited text file and adds each book to the library.
-        //Method to load books to a file and adds them to the library. the method takes a 'fileName' parameter which represents
-        // the pathway of the file to be loaded.
-        public void loadBooksFromFile(String fileName) {
-            try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
-                String line;
-
-                // Read each line from the file
-                while ((line = reader.readLine()) != null) {
-                    // Split the line by commas to get book information
-                    String[] bookInfo = line.split(",");
-                    // Pull the barcode number from the book
-                    int barcode = Integer.parseInt(bookInfo[0]);
-                    // Extract the title from the book information
-                    String title = bookInfo[1];
-                    // Extract the author from the book information
-                    String author = bookInfo[2];
-                    // Extract the genre from the book information
-                    String genre = bookInfo[3];
-                    // Extract the status from the book information
-                    String status = bookInfo[4];
-                    // Extract the due date from the book information
-                    String dueDate = bookInfo[5];
-                    // Create a new book object
-                    Book book = new Book(barcode, title, author, genre, status, dueDate);
-                    // Add the book to the collection of 'books'
-                    addBook(book);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
 
 
-
-            }
-        }
-
-
-
-
+    }
+}

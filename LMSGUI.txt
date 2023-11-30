@@ -1,3 +1,16 @@
+/**
+ * Name:Tiffany Albelto
+ *Course Name:Software Development 1 - 202410-CEN-3024C-16046
+
+ * Class Name: LMSGUI
+
+ * Description: The public class LMSGUI serves as the graphical user interface (GUI) for the Library Management System (LMS).
+ * Its objective is to provide a user-friendly interface for interacting with the library system, allowing users to perform
+ * tasks such as adding, removing, checking out, and checking in books.
+ */
+
+
+
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -8,7 +21,11 @@ import java.awt.event.ActionListener;
 import java.sql.*;
 
 
+
 public class LMSGUI {
+    /**
+     * Connection to the database
+     */
     Connection connection;
     private JTextField fileTextField;
     private JButton openFileButton;
@@ -24,20 +41,26 @@ public class LMSGUI {
     private JButton printDatabaseButton;
     private JTextField textField2;
     private JButton exitButton;
-    private JTextArea display;
+    private final JTextArea display;
 
-
-    private Library library;
+    /**
+     * Instance of the Library class for library management
+     */
+    private final Library library;
 
 
     public LMSGUI() {
+
+        /*Instantiate the Library class*/
         library = new Library();
 
-
+        /*Attach action listener for opening a file when the below Buttons are clicked*/
         openFileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String fileName = fileTextField.getText();
+
+                /*Load books from the file into the library*/
                 library.loadBooksFromFile(fileName);
                 //JOptionPane.showMessageDialog(openFileButton,fileTextField.getText()+"");
 
@@ -88,6 +111,8 @@ public class LMSGUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //library.listBooks();//Call the listBooks()method to print the database
+
+                /*Call the listBooks()method to print the database*/
                 listBooks();
             }
         });
@@ -96,15 +121,20 @@ public class LMSGUI {
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(8);// Terminate the application
+                /*Terminate the application*/
+                System.exit(8);
 
 
             }
         });
-//creating the frame and setting its properties
-        JFrame frame = new JFrame("Library Management System"); // Set the frame title
+
+        /* creating the frame and setting its properties*/
+        JFrame frame = new JFrame("Library Management System");
+
+        /*Set the frame title*/
         JPanel contentPane = new JPanel();
-        //set layout manager
+
+        /*set layout manager*/
         JPanel buttonPanel = new JPanel();
         JPanel displayPanel = new JPanel();
         contentPane.setLayout(new BorderLayout());
@@ -112,15 +142,18 @@ public class LMSGUI {
         contentPane.add(buttonPanel, BorderLayout.NORTH);
         contentPane.add(displayPanel, BorderLayout.SOUTH);
 
+        /*Create a new JTextArea with the specified rows and columns*/
         display = new JTextArea(100, 100);
 
         buttonPanel.setLayout(new GridLayout(7, 3));
 
-        frame.setContentPane(contentPane);// Set the root component of the frame
+        /*Set the root component of the frame*/
+        frame.setContentPane(contentPane);
 
         //displayPanel.add(display,BorderLayout.NORTH);
         contentPane.add(display, BorderLayout.CENTER);
-        //adding components to the frame
+
+        /*adding components to the frame*/
         buttonPanel.setLayout(new GridLayout(7, 3));
         buttonPanel.add(new JLabel("File Name"));
         buttonPanel.add(fileTextField);
@@ -150,23 +183,34 @@ public class LMSGUI {
         buttonPanel.add(exitButton);
         buttonPanel.add(new JLabel(""));
 
+        /*Set the default close operation*/
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Set the default close operation
-        frame.pack(); // Pack the components
-        frame.setVisible(true); // Make the frame visible
+        /*Pack the components*/
+        frame.pack();
+
+        /*Make the frame visible*/
+        frame.setVisible(true);
         display.setVisible(true);
         displayPanel.setVisible(true);
 
 
         try {
+            /*Establish a connection to the MySQL database using DriverManager and connection URL*/
             connection = DriverManager.getConnection(
+
+                    /* URL of the database*/
                     "jdbc:mysql://127.0.0.1:3306/LMS",
                     "root", "Chance24!"
 
             );
-
+            /*Create a statement for executing SQL queries*/
             Statement statement = connection.createStatement();
+
+            /*Execute a query to select all records from the "LibraryCollection" table*/
             ResultSet resultSet = statement.executeQuery("SELECT *FROM LibraryCollection");
+
+            /*Iterate through the result set and print the values of each column for each row*/
             while (resultSet.next()) {
                 System.out.println(resultSet.getString("Barcode"));
                 System.out.println(resultSet.getString("Title"));
@@ -186,22 +230,24 @@ public class LMSGUI {
                 // display.append(resultSet.getString("DueDate"));
 
 
+
                 display.append(String.valueOf(resultSet.getInt("Barcode")));
                 display.append("\t");
                 display.append(resultSet.getString("Title"));
                 display.append("\t\t\t");
                 display.append(resultSet.getString("Author"));
-                display.append("\t");
+                display.append("\t\t\t");
                 display.append(resultSet.getString("Genre"));
-                display.append("\t");
+                display.append("\t\t");
                 display.append(resultSet.getString("Book_Status"));
-                display.append("\t");
+                display.append("\t\t");
                 display.append(resultSet.getString("DueDate"));
                 display.append("\n");
 
 
             }
         } catch (SQLException e) {
+            /*Print the stack trace if a SQLException is caught*/
             e.printStackTrace();
         }
     }
@@ -211,20 +257,29 @@ public class LMSGUI {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new LMSGUI(); // Create an instance of LMSGUI
+                /* Create an instance of LMSGUI*/
+                new LMSGUI();
             }
         });
     }
 
 
+
+    /**
+     * Implement logic to open file and add books to the LMS database
+     * Display error message if the file was not found
+     */
     public void loadBooksFromFile(String fileName) {
-        // Implement logic to open file and add books to the LMS database
-        // Display error message if the file was not found
+
     }
 
+
+    /**
+     * Implement logic to print the LMS database to the screen
+     */
     public void listBooks() {
         try{
-        // Implement logic to print the LMS database to the screen
+
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery("SELECT *FROM LibraryCollection");
         display.setText("");
@@ -237,14 +292,14 @@ public class LMSGUI {
             System.out.println(resultSet.getString("DueDate"));
             int b = (resultSet.getInt("Barcode"));
 
-            
+
 
             display.append(String.valueOf(resultSet.getInt("Barcode")));
             display.append("\t");
             display.append(resultSet.getString("Title"));
             display.append("\t");
             display.append(resultSet.getString("Author"));
-            display.append("\t\t");
+            display.append("\t");
             display.append(resultSet.getString("Genre"));
             display.append("\t");
             display.append(resultSet.getString("Book_Status"));
@@ -259,11 +314,12 @@ public class LMSGUI {
     }
 }
 
-
+    /**
+     *  Implement logic to remove a book from the LMS database by barcode
+     *  Display a confirmation message if the book was deleted
+     *  Display an error message if the barcode was not found
+     */
     public void removeBookByBarcode(int barcode) {
-        // Implement logic to remove a book from the LMS database by barcode
-        // Display a confirmation message if the book was deleted
-        // Display an error message if the barcode was not found
         //JOptionPane.showMessageDialog(null, "Error");
         try {
             PreparedStatement statement = connection.prepareStatement("DELETE FROM LibraryCollection WHERE barcode = ?");
@@ -283,11 +339,12 @@ public class LMSGUI {
         listBooks();
     }
 
-
+    /**
+     *  Implement logic to remove a book from the LMS database by title
+     *  Display a confirmation message if the book was deleted
+     *  Display an error message if the title was not found
+     */
     public void removeBookByTitle(String title) {
-        // Implement logic to remove a book from the LMS database by title
-        // Display a confirmation message if the book was deleted
-        // Display an error message if the title was not found
         try {
             PreparedStatement statement = connection.prepareStatement("DELETE FROM LibraryCollection WHERE title = ?");
             statement.setString(1, title);
@@ -307,14 +364,17 @@ public class LMSGUI {
     }
 
 
-
+    /**
+     * Implement logic to check out a book from the LMS database by title
+     * Display a confirmation message
+     * Display an error message if the book is already checked out
+     */
     public void checkoutBook(String title) {
-        // Implement logic to check out a book from the LMS database by title
-        // Display a confirmation message
-        // Display an error message if the book is already checked out
         try {
-            PreparedStatement statement = connection.prepareStatement("UPDATE LibraryCollection SET Book_Status = 'checked out', DueDate = ? WHERE title = ?");
-            statement.setString(1, "2024-12-31"); // Set a default due date for simplicity
+            PreparedStatement statement = connection.prepareStatement("UPDATE LibraryCollection SET " +
+                    "Book_Status = 'checked out'" + ", DueDate = ? WHERE title = ?");
+            /*Set a default due date for simplicity*/
+            statement.setString(1, "2024-12-31");
             statement.setString(2, title);
             int rowsAffected = statement.executeUpdate();
             if (rowsAffected > 0) {
@@ -330,12 +390,16 @@ public class LMSGUI {
         listBooks();
     }
 
-
+    /**
+     * Implement logic to check in a book to the LMS database by title
+     */
     public void checkinBook(String title) {
-        // Implement logic to check in a book to the LMS database by title
         try {
-            PreparedStatement statement = connection.prepareStatement("UPDATE LibraryCollection SET Book_Status = 'checked in', DueDate = ? WHERE title= ?");
-            statement.setString(1, null); // Set a default due date for simplicity
+            PreparedStatement statement = connection.prepareStatement("UPDATE LibraryCollection SET" +
+                    " Book_Status = 'checked in', DueDate = ? WHERE title= ?");
+
+            /*Set a default due date for simplicity*/
+            statement.setString(1, null);
             statement.setString(2, title);
             int rowsAffected = statement.executeUpdate();
             if (rowsAffected > 0) {

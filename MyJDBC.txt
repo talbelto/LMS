@@ -1,16 +1,44 @@
+/**
+ *  Name:Tiffany Albelto
+ *  Course Name:Software Development 1 - 202410-CEN-3024C-16046
+
+ *  Class Name: MyJDBC
+
+ *  Description:The public class MyJDBC primarily serves the purpose of establishing a connection to MySQL database and
+ *  retrieving data from the LibraryCollection table utilizing Java Database Connectivity (JDBC). Its objective is to
+ *  demonstrate the integration of Java code with a MySQL database by handling database connectivity, executing SQL queries,
+ *  and processing the retrieved data. The class manages potential errors during database operations and provides
+ *  functionality to print out the information retrieved from the database.
+ */
+
+
+
 import java.sql.*;
 
+
+
 public class MyJDBC {
+
     public static void main(String[] args) {
         try {
+
+            /*attempt to establish a connection to the MYSQL database*/
             Connection connection = DriverManager.getConnection(
+
+                    /*database url*/
                     "jdbc:mysql://127.0.0.1:3306/LMS",
+
                     "root", "Chance24!"
 
             );
 
+            /*create a statement object to execute MYSQL queries*/
             Statement statement = connection.createStatement();
+
+             /*execute a MYSQL query to retrieveall records from the LibraryCollection table*/
             ResultSet resultSet = statement.executeQuery("SELECT *FROM LibraryCollection");
+
+            /*iterate through the result set and print the values of each column*/
             while (resultSet.next()) {
                 System.out.println(resultSet.getString("Barcode"));
                 System.out.println(resultSet.getString("Title"));
@@ -20,6 +48,8 @@ public class MyJDBC {
                 System.out.println(resultSet.getString("DueDate"));
             }
         } catch (SQLException e) {
+
+            /*print the stack trace of the exception if MYSQL error occurs*/
             e.printStackTrace();
         }
     }

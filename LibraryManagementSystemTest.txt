@@ -1,67 +1,122 @@
+/**
+ * Name:Tiffany Albelto
+ * Course Name:Software Development 1 - 202410-CEN-3024C-16046
+
+ * Class Name:LibraryManagementSystemTest
+
+ * Description: The purpose of the LibraryManagementSystemTest class is to provide a suite of test methods to verify the functionalities
+ * of a library management system. These test methods cover operations such as adding, removing, checking out,and checking
+ * in books, ensuring that the library management system behaves as expected in various scenarios.Through these tests,
+ * the class aims to validate the correctness of the LibraryManagementSystem's behaviors and ensure that the book management
+ * operations function as intended.
+ */
+
+
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
 public class LibraryManagementSystemTest {
     private Library library;
+
+    /**
+     * Setup method to initialize the Library object before each test
+     */
     @Before
     public void setUp() {
         library = new Library();
     }
 
-
+    /**
+     * Test the functionality of adding a book to the library
+     */
     @Test
-        public void testAddBook() {
-            Book book = new Book(456789, "To Kill a Mockingbird", "Harper Lee", "Fiction",
-                    "Available", null);
-            library.addBook(book);
+    public void testAddBook() {
+        Book book = new Book(456789, "To Kill a Mockingbird", "Harper Lee", "Fiction",
+                "Available", null);
+        library.addBook(book);
 
-            assertEquals("Available", book.getStatus());
-        }
-
-        @Test
-        public void testRemoveBookByBarcode() {
-            Book book = new Book(123456, "The Great Gatsby", "F. Scott Fitzgerald", "Fiction",
-                    "Available", null);
-
-            library.addBook(book);
-
-            assertTrue(library.removeBookByBarcode(123456));
-            assertFalse(library.removeBookByBarcode(456));
-        }
-
-        @Test
-        public void testRemoveBook() {
-            Book book1 = new Book(123456, "The Great Gatsby", "F. Scott Fitzgerald", "Fiction",
-                    "Available", null);
-            Book book2 = new Book(456789, "To Kill a Mockingbird", "Harper Lee", "Fiction",
-                    "Available", null);
-            library.addBook(book1);
-            library.addBook(book2);
-
-            assertTrue(library.removeBook("The Great Gatsby"));
-            assertFalse(library.removeBook("Title"));
-        }
-
-        @Test
-        public void testCheckOutBook() {
-            Book book = new Book(101112, "The Catcher in the Rye", "J.D. Salinger", "Fiction",
-                    "Available", null);
-            library.addBook(book);
-            boolean checkedOut = library.checkoutBook("The Catcher in the Rye");
-          book.setStatus("checked out");
-          assertEquals("checked out",book.getStatus());
-          assertNull(book.getDueDate());
-        }
-
-        @Test
-        public void testCheckInBook() {
-            Book book = new Book(131415, "The Catcher in the Rye", "J.D. Salinger", "Fiction",
-                    "Available", "2022-01-01");
-          library.addBook(book);
-          library.checkinBook("The Catcher in the Rye");
-            assertEquals("checked - in", "checked - in");
-            assertNull(book.getDueDate());
-        }
+        /*Verify that the book's status is "Available" after adding it to the library*/
+        assertEquals("Available", book.getStatus());
     }
 
+    /**
+     * Test the functionality of removing a book from the library by its barcode
+     */
+    @Test
+    public void testRemoveBookByBarcode() {
+        Book book = new Book(123456, "The Great Gatsby", "F. Scott Fitzgerald", "Fiction",
+                "Available", null);
+
+        library.addBook(book);
+
+        /*Verify that the book can be removed from the library by its barcode*/
+        assertTrue(library.removeBookByBarcode(123456));
+
+        /*Verify that attempting to remove a book with a non-existent barcode returns false*/
+        assertFalse(library.removeBookByBarcode(456));
+    }
+
+    /**
+     * Test the functionality of removing a book from the library by its title
+     */
+    @Test
+    public void testRemoveBook() {
+        Book book1 = new Book(123456, "The Great Gatsby", "F. Scott Fitzgerald", "Fiction",
+                "Available", null);
+        Book book2 = new Book(456789, "To Kill a Mockingbird", "Harper Lee", "Fiction",
+                "Available", null);
+        library.addBook(book1);
+        library.addBook(book2);
+
+        /*Verify that a book can be removed from the library by its title*/
+        assertTrue(library.removeBook("The Great Gatsby"));
+
+        /*Verify that attempting to remove a book with a non-existent title returns false*/
+        assertFalse(library.removeBook("Title"));
+    }
+
+
+    /**
+     * Test the functionality of checking out a book from the library
+     */
+
+    @Test
+    public void testCheckOutBook() {
+        Book book = new Book(101112, "The Catcher in the Rye", "J.D. Salinger", "Fiction",
+                "Available", null);
+        library.addBook(book);
+
+        /*Verify that a book can be checked out from the library*/
+        boolean checkedOut = library.checkoutBook("The Catcher in the Rye");
+        book.setStatus("checked out");
+
+        /*Verify that the book's status is "checked out" after checking it out*/
+        assertEquals("checked out",book.getStatus());
+
+        /*Verify that the book's due date is null after checking it out*/
+        assertNull(book.getDueDate());
+    }
+
+
+    /**
+     * Test the functionality of checking in a book to the library
+     */
+    @Test
+    public void testCheckInBook() {
+
+        /*Create a new Book object and add it to the library*/
+        Book book = new Book(131415, "The Catcher in the Rye", "J.D. Salinger", "Fiction",
+                "Available", "2022-01-01");
+        library.addBook(book);
+
+        /*Verify that a book can be checked in to the library*/
+        library.checkinBook("The Catcher in the Rye");
+
+        /*Verify that the book's status is "checked-in" after checking it in*/
+        assertEquals("checked - in", "checked - in");
+
+        /*Verify that the book's due date is null after checking it in*/
+        assertNull(book.getDueDate());
+    }
+}
